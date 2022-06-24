@@ -112,13 +112,14 @@ class scanners:
     ports = nmap_scan.getElementsByTagName('port')
     services = nmap_scan.getElementsByTagName('service')
     for i,port in enumerate(ports):
-      service = services[i]
-      if port.hasAttribute('portid') and service.hasAttribute('name'):
+      if port.hasAttribute('portid'):
        try:
-        port_template = c(port.attributes['portid'].value + " " + service.attributes['name'].value,'yellow')
+        service = services[i]
+        if port.hasAttribute('portid') and service.hasAttribute('name'):
+          port_template = c(port.attributes['portid'].value + " " + service.attributes['name'].value,'yellow')
        except:
         port_template = c(port.attributes['portid'].value + " UKNOWN", 'yellow')
-       output += f"{c('╟╴Open port:','cyan')}{port_template}"
+       output += f"{c('╟╴Open port:','cyan')}{port_template}\n"
     return output
    except KeyboardInterrupt:
     handler.throw.keyboardinterrupt()
@@ -166,35 +167,40 @@ def after_scans():
 
 #Scan types
 def stealth_flight():
+  cur_output = ""
   for target in session.target:
-
+    cur_output += c(f"⦗SCAN RESULTS FOR {target}⦘\n", "cyan")
     #Custom module (non intrusive)
     scanning.start_loadingscreen(target, "")
     lines = genocide_engine_scanner.url_finder(target).split("\n")
     scanning.stop_loadingscreen()
     after_scans()
-    print(c("⦗Genocide_engine output⦘\n║\n║", "cyan"))
+    cur_output += c("⦗Genocide_engine output⦘\n║\n║\n", "cyan")
     for line in lines:
        if len(line) > 0:
-        print(f"{c('╟╴','cyan')}{c(line, 'yellow')}")
+        cur_output += f"{c('╟╴','cyan')}{c(line, 'yellow')}\n"
 
 
     output = scanners.nmap(target, "-sS -F -T2", "")
-    print(output)
+    cur_output += output + "\n"
+    print(cur_output)
 
     
     
 
 
 def vuln_scan():
+  cur_output = ""
   for target in session.target:
+    cur_output += c(f"⦗SCAN RESULTS FOR {target}⦘\n", "cyan")
     if not session.flags:
       session.flags = "" 
     nmap_output = scanners.nmap(target, f"-Pn -sV -A {session.flags}", "◡")
     vuln_output = scanners.vuln_search(target)
     after_scans()
-    print(nmap_output)
-    print(vuln_output)
+    cur_output += nmap_output + "\n"
+    cur_output += vuln_output + "\n"
+    print(cur_output)
 
 
 
@@ -202,16 +208,19 @@ def vuln_scan():
 
 
 def battering_ram():
+  cur_output = ""
   for target in session.target:
+    cur_output += c(f"⦗SCAN RESULTS FOR {target}⦘\n", "cyan")
     if not session.flags:
       session.flags = "" 
     genocide_output = scanners.genocide_engine(target, "💣")
     nmap_output = scanners.nmap(target, f"-T4 -p- -sV -A {session.flags}", "💣")
     vuln_output = scanners.vuln_search(target)
     after_scans()
-    print(genocide_output)
-    print(nmap_output)
-    print(vuln_output)
+    cur_output += genocide_output + "\n"
+    cur_output += nmap_output + "\n"
+    cur_output += vuln_output + "\n"
+    print(cur_output)
 
 
 

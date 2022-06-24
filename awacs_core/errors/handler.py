@@ -1,5 +1,6 @@
 from termcolor import colored as c
 import sys
+import os
 
 class throw:
    def no_internet():
@@ -17,6 +18,7 @@ class throw:
       print(c("⦗ERROR ✈💥⦘ You didn't select a valid scan type, the valid scan types are: stealth_flight, vuln_scan, battering_ram.", "red"))
       sys.exit()
    def keyboardinterrupt():
+      os.system("clear")
       print(c("⦗ERROR ✈💥⦘ CNTRL+C Pressed! Stopping all scans.", "red"))
       sys.exit()
    def setup():

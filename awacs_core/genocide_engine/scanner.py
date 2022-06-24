@@ -45,7 +45,7 @@ def ftp_check(host):
 
        if len(feed_back) >= 0:
               #Initial variables
-              wordlist = open("core/genocide_engine/wordlists/ftp-combo.txt").readlines()
+              wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/ftp-combo.txt").readlines()
               trets = 0
               cache = []
               allowed = 10
@@ -235,7 +235,7 @@ def http_check(host, p_s, web_threads):
     whi, bad = http_wrong_calc(url)
    except:
     return ''
-   wordlist = "core/genocide_engine/wordlists/http-disco.txt"
+   wordlist = "/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/http-disco.txt"
 
    http_feed_back = http_brute(url, wordlist, bad, whi, web_threads)
    return http_feed_back
@@ -302,7 +302,7 @@ def ssh_brute(host):
     global trets, got
     #Initial variables, wordlist
     got = []
-    wordlist = "core/genocide_engine/wordlists/ssh_combo.txt"
+    wordlist = "/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/ssh_combo.txt"
     wordlist = open(wordlist, "r").readlines()
     cache = []
     allowed = 10
@@ -372,7 +372,7 @@ def mysql_brute_thread(host, lis):
 #Mysql brute thread starter, wordlist reader
 def mysql_brute(host):
    global trets, got
-   wordlist = open("core/genocide_engine/wordlists/mysql_combo.txt").readlines()
+   wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/mysql_combo.txt").readlines()
    cache = []
    got = []
    trets = 0
@@ -449,7 +449,7 @@ def smb_brute(host):
     #Anonymous login makes it hard to detect right and wrong creds
     if not smb_anon:
 
-     wordlist = open("core/genocide_engine/wordlists/smb_combo.txt").readlines()
+     wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/smb_combo.txt").readlines()
      
      #Reads wordlist, starts threads
      for line in wordlist:
@@ -537,7 +537,7 @@ def telnet_brute_thread(lis, host):
 def telnet_brute(host):
      global trets, got, fails, fails_max
     
-     wordlist = open("core/genocide_engine/wordlists/telnet_combo.txt").readlines()
+     wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/telnet_combo.txt").readlines()
      cache = []
      fails = 0
      fails_max = len(wordlist)/2
@@ -575,7 +575,7 @@ def url_finder(host):
     report = ""
     got = []
     output = subprocess.check_output(f'sigurlfind3r -d  "{host}" -s -iS', shell=True).decode()
-    with open("core/genocide_engine/wordlists/extensions") as lines:
+    with open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/extensions") as lines:
         for line in lines:
             line = line.strip()
             for check_against in output.split("\n"):
