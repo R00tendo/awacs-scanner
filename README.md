@@ -56,8 +56,9 @@ awacs -t example1.example.com,example2.example.com --st battering_ram -c config.
   * Full genocide_engine treatment
   * Same as vuln_scan without the nmap one
 
-##Building from source
+## Building from source
 ```
+pip3 install -r requirements.txt
 cp -r awacs_core /usr/lib/python3/dist-packages
 mv awacs.py /usr/bin/awacs
 chmod +x /usr/bin/awacs
