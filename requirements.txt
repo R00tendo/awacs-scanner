@@ -1,0 +1,7 @@
+blessed
+termcolor
+argparse
+requests
+paramiko
+mariadb
+smbprotocol
