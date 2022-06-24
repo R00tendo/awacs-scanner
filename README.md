@@ -2,7 +2,7 @@
 <img src="https://user-images.githubusercontent.com/72181445/175283893-5f86ae86-36d0-4b3b-a8b7-6c99b7b1dfa1.png" width=700></img>
 
 ## What's awacs-scanner?
-awacs-scanner is a fully automated scanner that uses a combination of genocide_engine, nmap, vulners, osint to get as much as possible info and vulnerabilities about a system/systems. this removes the hassle of googling the version number of a service and trying to find exploits that may or may not even work. Because awacs-scanner supports getting targets from a file your can easily for example save all the target company subdomains to a file and let awacs-scanner handler the rest.
+awacs-scanner is a fully automated scanner that uses a combination of genocide_engine, nmap, vulners, osint to get as much as possible info and vulnerabilities about a system/systems. This removes the hassle of googling the version number of a service and trying to find exploits that may or may not even work. Because awacs-scanner supports getting targets from a file your can easily for example save all the target company subdomains to a file and let awacs-scanner handle the rest.
 
 ## What's awacs? (Airborne Warning & Control System)
 
@@ -43,6 +43,7 @@ awacs -t target.txt --st stealth_flight
 awacs -t example.com -f "-p 21"
 awacs -t example1.example.com,example2.example.com --st battering_ram -c config.conf
 ```
+<a href="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob" target="_blank"><img src="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob.svg" width=700/></a>
 ## Scan modes explained
 * stealth_flight
   * Syn nmap scan
