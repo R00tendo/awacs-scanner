@@ -1,7 +1,26 @@
 #!/usr/bin/python3
 #Awacs vulnerability scanner by @R00tendo
 import random
-from awacs_core.errors import handler
+from pathlib import Path
+import argparse
+import time
+import sys
+import os
+from xml.dom import minidom
+from termcolor import colored as c
+
+try:
+    from awacs_core.errors import handler
+except:
+    print("Initialization Error! Can't import awacs_core, trying to automatically fix the issue.")
+    awacs = input("Path to awacs_core:")
+    for dire in sys.path:
+        if "/usr/lib/python" in dire and "dist-packages" in dire:
+            os.system("cp -r " + awacs + " " + dire.strip())
+    print("Please restart awacs")
+    sys.exit()
+
+
 from awacs_core.scan import nmap
 from awacs_core.xml import xml_parser
 from awacs_core.conf import read_conf
@@ -9,15 +28,9 @@ from awacs_core.genocide_engine import scanner as genocide_engine_scanner
 from awacs_core.genocide_engine import api as genocide_engine_api
 from awacs_core.loading_screens import scanning
 from awacs_core.files import read_file
-from xml.dom import minidom
-from termcolor import colored as c
 from awacs_core.exploit_search import searchsploit
 from awacs_core.exploit_search import vulners
-from pathlib import Path
-import argparse
-import time
-import sys
-import os
+
 
 
 logo = c("""
