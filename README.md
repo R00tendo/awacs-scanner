@@ -1,4 +1,4 @@
-# awacs-scanner V2.0.2
+# awacs-scanner V2.0.3
 <img src="https://user-images.githubusercontent.com/72181445/175283893-5f86ae86-36d0-4b3b-a8b7-6c99b7b1dfa1.png" width=700></img>
 
 ## What's awacs-scanner?
