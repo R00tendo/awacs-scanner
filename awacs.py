@@ -5,6 +5,7 @@ from pathlib import Path
 import argparse
 import time
 import sys
+import socket
 import os
 from xml.dom import minidom
 from termcolor import colored as c
@@ -20,7 +21,7 @@ except:
     print("Please restart awacs")
     sys.exit()
 
-
+from awacs_core.scan import s3_bucket_scanner
 from awacs_core.scan import nmap
 from awacs_core.xml import xml_parser
 from awacs_core.conf import read_conf
@@ -76,7 +77,18 @@ logo = c("""
 
 #Scanners
 class scanners:
-
+ 
+ def s3_buckets(domain, threads):
+   output = ""
+   try:
+    buckets = s3_bucket_scanner.scan(domain, wordlist_path, threads)
+    output += c("⦗S3 Bucket discovery⦘\n║\n║\n", "cyan")
+    for bucket in buckets:
+     output += c("╟╴", "cyan") + bucket.strip() + "\n"
+   except KeyboardInterrupt:
+    handler.throw.keyboardinterrupt()
+   return output
+ 
  def vuln_search(target):
    output = ""
    try:
@@ -103,7 +115,7 @@ class scanners:
    output = ""
    try:
     scanning.start_loadingscreen(target, char)
-    lines = genocide_engine_api.scan(target).split("\n")
+    lines = genocide_engine_api.scan(target, wordlist_path).split("\n")
     scanning.stop_loadingscreen()
     output += c("⦗Genocide_engine output⦘\n║\n║\n", "cyan")
     for line in lines:
@@ -186,14 +198,16 @@ def stealth_flight():
     #Custom module (non intrusive)
     scanning.start_loadingscreen(target, "")
     lines = genocide_engine_scanner.url_finder(target).split("\n")
+    if session.company != "NULL":
+     cur_output += scanners.s3_buckets(session.company, threads)
     scanning.stop_loadingscreen()
     after_scans()
     cur_output += c("⦗Genocide_engine output⦘\n║\n║\n", "cyan")
     for line in lines:
        if len(line) > 0:
         cur_output += f"{c('╟╴','cyan')}{c(line, 'yellow')}\n"
-
-
+    
+    
     output = scanners.nmap(target, "-sS -F -T2", "")
     cur_output += output + "\n"
     print(cur_output)
@@ -222,6 +236,9 @@ def vuln_scan():
 
 def battering_ram():
   cur_output = ""
+  
+  threads = 50 #Amount of threads used to scan for s3 buckets
+
   for target in session.target:
     cur_output += c(f"⦗SCAN RESULTS FOR {target}⦘\n", "cyan")
     if not session.flags:
@@ -229,10 +246,14 @@ def battering_ram():
     genocide_output = scanners.genocide_engine(target, "💣")
     nmap_output = scanners.nmap(target, f"-T4 -p- -sV -A {session.flags}", "💣")
     vuln_output = scanners.vuln_search(target)
+    if session.company != "NULL":
+     s3_output = scanners.s3_buckets(session.company, threads)
     after_scans()
     cur_output += genocide_output + "\n"
     cur_output += nmap_output + "\n"
     cur_output += vuln_output + "\n"
+    if session.company != "NULL":
+     cur_output += s3_output + "\n"
     print(cur_output)
 
 
@@ -249,13 +270,25 @@ def get_args():
     parser.add_argument("-f", "--flags", help="Nmap flags (\"-sV -A\")")#, required=True)
     parser.add_argument("--st", "--scan-type", help="stealth_flight, vuln_scan, battering_ram  (Read more about scans from github)", default="vuln_scan")
     parser.add_argument("-c", "--configuration", help="Configuration file for awacs scanner (Syntax in github).", default=f"{Path.home()}/.awacs/configuration.conf")
+    parser.add_argument("--company", help="Name of the company being scanned. This will be used for s3 bucket scanning (\"NULL\" if it's not a company)", default="NULL")
     args = parser.parse_args()
     return args
 
 
+def host_up(targets):
+    for target in targets:
+        try:
+            socket.gethostbyname(target)
+        except:
+            handler.throw.target_doesnt_exist()
+
 #MAIN
 def main(args):
-   global session
+   global session, wordlist_path
+   
+   #Path to the python library eg. /usr/lib/python3/awacs_core
+   wordlist_path = nmap.__file__.split("/scan/nmap.py")[0]
+
    #Main "database" for the target and configuration
    class session:
     None
@@ -273,8 +306,10 @@ def main(args):
    session.configuration = args.configuration
    session.flags = args.flags
    session.scan_type = args.st
+   session.company = args.company
    session = read_conf.read(session)
    
+   host_up(session.target)
 
    if session.scan_type.lower() == "stealth_flight": #Done
        stealth_flight()

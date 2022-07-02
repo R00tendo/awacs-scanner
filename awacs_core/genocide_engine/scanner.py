@@ -10,9 +10,9 @@ import time
 import subprocess
 import requests
 import random
+from awacs_core.scan import nmap
 
 #FTP SECTION!
-
 
 #FTP Thread
 def ftp_brute(combos, host):
@@ -45,7 +45,7 @@ def ftp_check(host):
 
        if len(feed_back) >= 0:
               #Initial variables
-              wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/ftp-combo.txt").readlines()
+              wordlist = open(f"{wordlist_path}/genocide_engine/wordlists/ftp-combo.txt").readlines()
               trets = 0
               cache = []
               allowed = 10
@@ -372,7 +372,7 @@ def mysql_brute_thread(host, lis):
 #Mysql brute thread starter, wordlist reader
 def mysql_brute(host):
    global trets, got
-   wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/mysql_combo.txt").readlines()
+   wordlist = open(f"{wordlist_path}/genocide_engine/wordlists/mysql_combo.txt").readlines()
    cache = []
    got = []
    trets = 0
@@ -449,7 +449,7 @@ def smb_brute(host):
     #Anonymous login makes it hard to detect right and wrong creds
     if not smb_anon:
 
-     wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/smb_combo.txt").readlines()
+     wordlist = open(f"{wordlist_path}/genocide_engine/wordlists/smb_combo.txt").readlines()
      
      #Reads wordlist, starts threads
      for line in wordlist:
@@ -537,7 +537,7 @@ def telnet_brute_thread(lis, host):
 def telnet_brute(host):
      global trets, got, fails, fails_max
     
-     wordlist = open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/telnet_combo.txt").readlines()
+     wordlist = open(f"{wordlist_path}/genocide_engine/wordlists/telnet_combo.txt").readlines()
      cache = []
      fails = 0
      fails_max = len(wordlist)/2
@@ -572,10 +572,14 @@ def telnet_brute(host):
 
 #URL FINDER
 def url_finder(host):
+    try:
+        Test = wordlist_path
+    except:
+        globals()['wordlist_path'] = nmap.__file__.split("/scan/nmap.py")[0]
     report = ""
     got = []
     output = subprocess.check_output(f'sigurlfind3r -d  "{host}" -s -iS', shell=True).decode()
-    with open("/usr/lib/python3/dist-packages/awacs_core/genocide_engine/wordlists/extensions") as lines:
+    with open(f"{wordlist_path}/genocide_engine/wordlists/extensions") as lines:
         for line in lines:
             line = line.strip()
             for check_against in output.split("\n"):
@@ -590,7 +594,8 @@ def url_finder(host):
 
 
 #Central hub to decide what scans to run
-def checks(host, http, https, ssh, telnet, ftp, smtp, rpcbind, mysql, smb, rdp, web_threads):
+def checks(host, http, https, ssh, telnet, ftp, smtp, rpcbind, mysql, smb, rdp, web_threads, wordlist_path):
+     globals()['wordlist_path'] = wordlist_path
      warnings.filterwarnings(action='ignore')
      only_https = False
      feed_back = ""

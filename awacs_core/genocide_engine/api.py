@@ -1,7 +1,7 @@
 from awacs_core.genocide_engine import scanner
 from awacs_core.genocide_engine import host_up
 
-def scan(target):
+def scan(target, wordlist_path):
   target=target
   web_threads="40"  
   http = host_up.check2(target, 80) 
@@ -14,5 +14,5 @@ def scan(target):
   mysql = host_up.check2(target, 3306)
   smb = host_up.check2(target, 445)  
   rdp = host_up.check2(target, 3389)
-  resp = scanner.checks(target, http, https, ssh, telnet, ftp, smtp, rpcbind, mysql, smb, rdp, web_threads)
+  resp = scanner.checks(target, http, https, ssh, telnet, ftp, smtp, rpcbind, mysql, smb, rdp, web_threads, wordlist_path)
   return resp

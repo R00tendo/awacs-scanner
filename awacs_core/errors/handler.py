@@ -24,3 +24,6 @@ class throw:
    def setup():
       print(c("⦗ERROR ✈💥⦘ Your setup is not complete, automatically setting up awacs.", "red"))
       return
+   def target_doesnt_exist():
+      print(c("⦗ERROR ✈💥⦘ All or one of the targets doesn't exist!", "red"))
+      sys.exit()
