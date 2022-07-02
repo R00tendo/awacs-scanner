@@ -1,4 +1,4 @@
-# awacs-scanner V2.0.3
+# awacs-scanner V2.2.7
 <img src="https://user-images.githubusercontent.com/72181445/175283893-5f86ae86-36d0-4b3b-a8b7-6c99b7b1dfa1.png" width=700></img>
 
 ## What's awacs-scanner?
@@ -15,6 +15,7 @@ BTW. awacs-scanner has nothing to do with the actual plane, it is just named tha
 * Python module so you can make a tool yourself with the awacs_core
 * vulners api to search for exploits
 * searchsploit to search for exploits
+* S3 Bucket discovery
 
 ## Installation
 1. Go to the releases tab
@@ -36,12 +37,15 @@ BTW. awacs-scanner has nothing to do with the actual plane, it is just named tha
                         stealth_flight, vuln_scan, battering_ram (Read more about scans from github)
   -c CONFIGURATION, --configuration CONFIGURATION
                         Configuration file for awacs scanner (Syntax in github).
+  --company COMPANY     Name of the company being scanned. This will be used for s3 bucket scanning ("NULL" if it's not a company)
+
 ```
 ## Example usage
 ```
 awacs -t target.txt --st stealth_flight
 awacs -t example.com -f "-p 21"
 awacs -t example1.example.com,example2.example.com --st battering_ram -c config.conf
+awacs -t randomcompany.corp --st battering_ram --company randomcompany
 ```
 <a href="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob" target="_blank"><img src="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob.svg" width=700/></a>
 
@@ -51,6 +55,7 @@ Showing an example of awacs-scanner’s potential by scanning a russian ftp serv
 * stealth_flight
   * Syn nmap scan
   * Sesitive file discovery by osint
+  * S3 Bucket discovery
 * vuln_scan (default if none provided)
   * Nmap scan with version detection
   * Use searchsploit to search for exploits
@@ -59,6 +64,7 @@ Showing an example of awacs-scanner’s potential by scanning a russian ftp serv
   * Full aggressive nmap
   * Full genocide_engine treatment
   * Same as vuln_scan without the nmap one
+  * S3 Bucket discovery
 
 ## Building from source
 ```
