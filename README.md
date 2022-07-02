@@ -68,3 +68,5 @@ mv awacs.py /usr/bin/awacs
 chmod +x /usr/bin/awacs
 awacs
 ```
+
+Donate Monero: 48ZrWwcf1gpG9VCe7agYru36SJhKwDDyGCgGw4TvkAG92Exd9pN7GBvL23SkwrMMbgdFa7BnFX2k6cD49SzV7pv42B4JDQE
