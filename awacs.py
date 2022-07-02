@@ -193,6 +193,7 @@ def after_scans():
 #Scan types
 def stealth_flight():
   cur_output = ""
+  threads = 10
   for target in session.target:
     cur_output += c(f"⦗SCAN RESULTS FOR {target}⦘\n", "cyan")
     #Custom module (non intrusive)
