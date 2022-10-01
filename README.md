@@ -20,7 +20,7 @@ BTW. awacs-scanner has nothing to do with the actual plane, it is just named tha
 ## Installation
 1. Go to the releases tab
 2. Download the latest .deb package
-3. `apt install ./awacs_scanner.dev`
+3. `apt install ./awacs_scanner.deb`
 4. `awacs`
 5. Go to /root/.awacs
 6. Put your vulners api key into the configuration.conf file in this format: `vulners_api=THE_KEY`
