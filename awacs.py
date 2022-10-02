@@ -298,7 +298,9 @@ def main(args):
    #Prerequisities
    if "," not in args.target:
     if os.path.isfile(args.target):
-        session.target = read_file.read(args.target)
+        session.target = []
+        for target in read_file.read(args.target):
+           session.target.append(target.strip())
     else:
         session.target = [args.target]
    else:
