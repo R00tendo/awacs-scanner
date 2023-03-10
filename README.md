@@ -47,7 +47,6 @@ awacs -t example.com -f "-p 21"
 awacs -t example1.example.com,example2.example.com --st battering_ram -c config.conf
 awacs -t randomcompany.corp --st battering_ram --company randomcompany
 ```
-<a href="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob" target="_blank"><img src="https://asciinema.org/a/qSyHigUlx0liyHcuWOb5ZTrob.svg" width=700/></a>
 
 Showing an example of awacs-scanner’s potential by scanning a russian ftp server.
 
