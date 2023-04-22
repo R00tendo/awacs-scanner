@@ -13,8 +13,8 @@ BTW. awacs-scanner has nothing to do with the actual plane, it is just named tha
 ## Functions
 * Genocide engine
 * Python module so you can make a tool yourself with the awacs_core
-* vulners api to search for exploits
-* searchsploit to search for exploits
+* Vulners api to search for exploits
+* SearchSploit to search for exploits
 * S3 Bucket discovery
 
 ## Installation
