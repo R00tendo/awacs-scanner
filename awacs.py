@@ -7,12 +7,16 @@ import time
 import sys
 import socket
 import os
+import shutil
 from xml.dom import minidom
 from termcolor import colored as c
 
 try:
     from awacs_core.errors import handler
 except:
+    if os.getuid() != 0:
+        print("Initialization Error! Tried to resolve issure but root is needed!")
+        sys.exit()
     print("Initialization Error! Can't import awacs_core, trying to automatically fix the issue.")
     awacs = input("Path to awacs_core:")
     for dire in sys.path:
@@ -32,8 +36,14 @@ from awacs_core.files import read_file
 from awacs_core.exploit_search import searchsploit
 from awacs_core.exploit_search import vulners
 
-
-
+if "/go/bin" not in os.getenv("PATH"):
+    print("not")
+    os.environ["PATH"] += ":" + os.getenv("HOME") + "/go/bin"
+print(os.getenv("PATH"))
+for needed_program in ["gau", "searchsploit", "nmap"]:
+    if shutil.which(needed_program) == None:
+        print(c(f"⦗ERROR⦘ Program not found: {needed_program}", "red"))
+        sys.exit()
 logo = c("""
                                              GGGBBBBBBBBBBBBGG
                                      GGMGGMMM               GMMMOMMMG
@@ -54,34 +64,17 @@ logo = c("""
                                   :?B&&&&GGGGGGGGG?^.JFF          .!5GBBBBBBBBBPJJ^    .:^^.        
                                      :JG#&&&&@@@&&&&&#5?^.     .!YGBBBBBBBBBBGYJ7.                  
                                         .!5B&&&&&&@&&&&&&BP7:^YGBBBBBBBBBBBB5JJ^                    
-                                            ^?P#&&&&&&@&&&&&&#GPPGGGBBBBBBPJ?!                      
-                                               .^JG#&&&&&@@&&&&&#BGPPGGGPJ??:                       
-                                                 :!5PGB#&&&&&@@&&&&&#BG5??7^^:^~^:.                 
-                                            .^7YPGGGGGGGBB#&&&&&&@&&&&&&#BPJ7!^^::.                 
-                                        .^?5GGGGGGGGGGGGGGBBB#&&&&&&@@&&&&&&#GY~^                   
+                                            ^?P#&&&&&&@&&&&&&#GPPGGGBBBBBBPJ?!                      .^JG#&&&&&@@&&&&&#BGPPGGGPJ??:                       :!5PGB#&&&&&@@&&&&&#BG5??7^^:^~^:.                 .^7YPGGGGGGGBB#&&&&&&@&&&&&&#BPJ7!^^::.                 .^?5GGGGGGGGGGGGGGBBB#&&&&&&@@&&&&&&#GY~^                   
                                     .~?5PGPPPP5PPPPPPPGGB##&@@@@##&&&&&&@@&&&&&&BPJ~.               
                                 :~?5PPP555555555PPGB#&&@@@&#GJ^. .~JG#&&&&&&@@&&&&&&#P?.            
                            ..!?5PPP555555PPPGB##&@@@&&GY7:           .~5B&&&&&&&&&&@@@&P!           
                       .:!7YPPGGGGGGGGGGB#&&@@@&&BY^^.                    ^?P#&&&&&@@@&#B#G:         
                   .~JPGGGGGGGBBBBB##&@@@@&BJ!^~^:.                          .~JG#&@@@@@@@&#~        
-             .^75PGGGGGGGGGGB#&&@@@&GY!:.      .:^^^::^:                        :75#&@@@@@@&.       
-         .~?5PGGPPPPGGGB#&&@@&#P?^.               .:~!!^~                           :!75G#GG.       
-     .!5PGGGGGBBB##&&@@@&#5!^.                       ..:                                            
-       ^5B&&&&&@@@&#PJ~:^^:.                                                                        
+             .^75PGGGGGGGGGGB#&&@@@&GY!:.      .:^^^::^:                        :75#&@@@@@@&.       .~?5PGGPPPPGGGB#&&@@&#P?^.               .:~!!^~                           :!75G#GG.       .!5PGGGGGBBB##&&@@@&#5!^.                       ..:                                            ^5B&&&&&@@@&#PJ~:^^:.                                                                        
          .7B&#PJ!:.      .:^^^:^^.                                                                  
                             :^~!^^~                                                                 
                               .:::  
-                AWACS Scanner.                                    CODED BY:@R00tendo                                                                
-""", "cyan")
-
-
-#Scanners
-class scanners:
- 
- def s3_buckets(domain, threads):
-   output = ""
-   try:
-    buckets = s3_bucket_scanner.scan(domain, wordlist_path, threads)
+                AWACS Scanner.                                    CODED BY:@R00tendo                                                                """, "cyan") #Scanners class scanners: def s3_buckets(domain, threads): output = "" try: buckets = s3_bucket_scanner.scan(domain, wordlist_path, threads)
     output += c("⦗S3 Bucket discovery⦘\n║\n║\n", "cyan")
     for bucket in buckets:
      output += c("╟╴", "cyan") + bucket.strip() + "\n"
@@ -161,6 +154,10 @@ def setup():
     os.system("apt install -y libmariadb3 libmariadb-dev")
     os.system("apt install -y python3")
     os.system("apt install -y python3-pip")
+    os.system("apt install -y searchsploit")
+    os.system("apt install -y nmap")
+    os.system("go install github.com/lc/gau/v2/cmd/gau@latest")
+    os.system("export PATH=$PATH:$HOME/go/bin")
 
     os.chdir(Path.home())
 
@@ -269,9 +266,9 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--target", help="Targets/target to scan in one of these formats: divided by \",\" or file of targets.", required=True)
     parser.add_argument("-f", "--flags", help="Nmap flags (\"-sV -A\")")#, required=True)
-    parser.add_argument("--st", "--scan-type", help="stealth_flight, vuln_scan, battering_ram  (Read more about scans from github)", default="vuln_scan")
+    parser.add_argument("--st", "--scan-type", help="stealth_flight (OSINT), vuln_scan, battering_ram (everything + bruteforce)  (Read more about scans from github)", default="vuln_scan")
     parser.add_argument("-c", "--configuration", help="Configuration file for awacs scanner (Syntax in github).", default=f"{Path.home()}/.awacs/configuration.conf")
-    parser.add_argument("--company", help="Name of the company being scanned. This will be used for s3 bucket scanning (\"NULL\" if it's not a company)", default="NULL")
+    parser.add_argument("--company", help="Name of the company being scanned. This will be used for s3 bucket scanning (default is \"NULL\" aka it's not a company)", default="NULL")
     args = parser.parse_args()
     return args
 

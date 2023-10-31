@@ -578,7 +578,7 @@ def url_finder(host):
         globals()['wordlist_path'] = nmap.__file__.split("/scan/nmap.py")[0]
     report = ""
     got = []
-    output = subprocess.check_output(f'sigurlfind3r -d  "{host}" -s -iS', shell=True).decode()
+    output = subprocess.check_output(f'gau --subs --threads 5 "{host}" 2> /dev/null', shell=True).decode()
     with open(f"{wordlist_path}/genocide_engine/wordlists/extensions") as lines:
         for line in lines:
             line = line.strip()
