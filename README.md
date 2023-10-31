@@ -1,4 +1,4 @@
-# awacs-scanner V2.2.9
+# awacs-scanner V2.3.9
 <img src="https://user-images.githubusercontent.com/72181445/175283893-5f86ae86-36d0-4b3b-a8b7-6c99b7b1dfa1.png" width=700></img>
 
 ## What's awacs-scanner?
@@ -10,21 +10,20 @@ awacs-scanner is a fully automated scanner that uses a combination of genocide_e
 
 BTW. awacs-scanner has nothing to do with the actual plane, it is just named that because the plane is used for survaillence, so is awacs-scanner.
 
-## Functions
-* Genocide engine
-* Python module so you can make a tool yourself with the awacs_core
-* Vulners api to search for exploits
+## Features
+* Vulners API to search for exploits
 * SearchSploit to search for exploits
 * S3 Bucket discovery
 
 ## Installation
-1. Go to the releases tab
-2. Download the latest .deb package
-3. `apt install ./awacs_scanner.deb`
-4. `awacs`
-5. Go to /root/.awacs
-6. Put your vulners api key into the configuration.conf file in this format: `vulners_api=THE_KEY`
-7. Save file
+1.
+```
+git clone https://github.com/R00tendo/awacs-scanner
+cd awacs-scanner
+pip3 install -r  requirements.txt
+sudo python3 awacs.py
+```
+2. If you have Vulners API keys, go to /root/.awacs and put your vulners api key into the configuration.conf file in this format: `vulners_api=THE_KEY`
 
 ## Usage
 ```
@@ -64,14 +63,5 @@ Showing an example of awacs-scanner’s potential by scanning a russian ftp serv
   * Full genocide_engine treatment
   * Same as vuln_scan without the nmap one
   * S3 Bucket discovery
-
-## Building from source
-```
-pip3 install -r requirements.txt
-cp -r awacs_core /usr/lib/python3/dist-packages
-mv awacs.py /usr/bin/awacs
-chmod +x /usr/bin/awacs
-awacs
-```
 
 Donate Monero: 48ZrWwcf1gpG9VCe7agYru36SJhKwDDyGCgGw4TvkAG92Exd9pN7GBvL23SkwrMMbgdFa7BnFX2k6cD49SzV7pv42B4JDQE
